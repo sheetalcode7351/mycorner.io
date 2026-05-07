@@ -1,0 +1,272 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(to bottom ,#cfcfcf ,#f6f3ec ,#87847D );
+  background: url(Image/BGGGG.jpeg);
+}
+
+.scrapbook-page{
+  width:min(1280px,88vw);
+  aspect-ratio:16/9;
+  position:relative;
+  overflow:hidden;
+  background:#f6f3ec;
+  background: url(Image/WhatsApp\ Image\ 2026-03-13\ at\ 8.21.30\ PM\ \(1\).jpeg);
+  box-shadow:0 18px 45px rgba(0,0,0,0.14);
+}
+
+/* heading */
+.title-img{
+  position:absolute;
+  top:2%;
+  left:50%;
+  transform:translateX(-50%);
+  width:52%;
+  z-index:40;
+  pointer-events:none;
+  user-select:none;
+}
+
+/* common */
+.item{
+  position:absolute;
+  display:block;
+  transition:transform 0.35s ease, filter 0.35s ease;
+}
+
+.item img{
+  width:100%;
+  display:block;
+  user-select:none;
+
+}
+
+/* BOOK */
+.cover{
+  width:29%;
+  left:50%;
+  top:31%;
+  transform:translateX(-50%);
+  z-index:20;
+  transition:transform 0.35s ease, filter 0.35s ease;
+}
+
+.cover:hover{
+  transform:translateX(-50%) scale(1.03);
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,0.16));
+}
+
+/* ROSE */
+.rose{
+  width:25%;
+  left:24%;
+  top:39%;
+  transform:rotate(-8deg);
+  z-index:12;
+}
+
+.rose:hover{
+  transform:rotate(-8deg) scale(1.03);
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,0.14));
+}
+
+/* CD */
+.cd{
+  width:34%;
+  left:50%;
+  top:41%;
+  z-index:11;
+}
+
+.cd:hover{
+  transform:scale(1.02);
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,0.14));
+}
+
+/* POLAROID */
+.polaroid{
+  width:12%;
+  left:36%;
+  top:55%;
+  transform:rotate(5deg);
+  z-index:20;
+  transition:transform 0.35s ease, filter 0.35s ease;
+}
+
+.polaroid:hover{
+  transform:rotate(9deg) scale(1.04);
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,0.16));
+}
+
+/* top left right equal, bottom zyada */
+.polaroid-frame{
+  width:100%;
+  background:#ffffff;
+  padding:11px 11px 28px 11px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.18);
+  overflow:hidden;
+}
+
+/* image inside polaroid */
+.polaroid-frame img{
+  width:100%;
+  height:auto;
+  display:block;
+  opacity:1;
+  transition:opacity 0.4s ease;
+  object-fit:contain;
+}
+
+/* CAMERA */
+.camera{
+  width:21%;
+  left:32.5%;
+  top:70%;
+  transform:rotate(-13deg);
+  z-index:25;
+}
+
+.camera:hover{
+  transform:rotate(-14deg) scale(1.03);
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,0.14));
+}
+
+/* LOLLIPOP */
+.heart{
+  width:4%;
+  left:46.5%;
+  top:63%;
+  transform:rotate(-12deg);
+  z-index:24;
+}
+
+.heart:hover{
+  transform:rotate(-12deg) scale(1.06);
+  filter:drop-shadow(0 6px 12px rgba(0,0,0,0.12));
+}
+
+/* INSECT */
+.insect{
+  width:5.8%;
+  left:60%;
+  top:84%;
+  transform:rotate(8deg);
+  z-index:26;
+}
+
+.insect:hover{
+  transform:rotate(8deg) scale(1.06);
+  filter:drop-shadow(0 6px 12px rgba(0,0,0,0.12));
+}
+
+/* tablet */
+@media (max-width:1000px){
+  .title-img{
+    width:58%;
+  }
+
+  .cover{
+    width:31%;
+    top:32%;
+  }
+
+  .rose{
+    width:21%;
+    left:18%;
+    top:58%;
+  }
+
+  .cd{
+    width:27%;
+    left:64%;
+    top:47%;
+  }
+
+  .polaroid{
+    width:16%;
+    left:34%;
+    top:60%;
+  }
+
+  .camera{
+    width:23%;
+    left:29%;
+    top:78%;
+  }
+
+  .heart{
+    width:6.2%;
+    left:57%;
+    top:65%;
+  }
+
+  .insect{
+    width:6.8%;
+    left:62%;
+    top:86%;
+  }
+}
+
+/* mobile */
+@media (max-width:700px){
+  .scrapbook-page{
+    width:95vw;
+    aspect-ratio:16/10;
+  }
+
+  .title-img{
+    width:66%;
+    top:7%;
+  }
+
+  .cover{
+    width:36%;
+    top:33%;
+  }
+
+  .rose{
+    width:24%;
+    left:13%;
+    top:59%;
+  }
+
+  .cd{
+    width:30%;
+    left:64%;
+    top:49%;
+  }
+
+  .polaroid{
+    width:18%;
+    left:31%;
+    top:61%;
+  }
+
+  .camera{
+    width:27%;
+    left:25%;
+    top:79%;
+  }
+
+  .heart{
+    width:7%;
+    left:57%;
+    top:66%;
+  }
+
+  .insect{
+    width:7.8%;
+    left:62%;
+    top:87%;
+  }
+}

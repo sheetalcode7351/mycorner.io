@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Me</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:url("Image/BGGGG.jpeg") center/cover no-repeat;
+
+font-family:sans-serif;
+}
+
+/* main layout */
+
+.container{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:50px;
+position:relative;
+}
+
+/* board */
+
+.about-board{
+width:485px;
+display:block;
+position:relative;
+z-index:3;
+}
+
+/* polaroid group */
+
+.polaroid-wrap{
+position:relative;
+
+width:380px;
+height:440px;
+
+margin-top:90px;
+margin-left:-160px;
+}
+
+/* static polaroid frame */
+
+.polaroid-back{
+position:absolute;
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+border-radius:8px;
+
+z-index:1;
+}
+
+/* changing photo */
+
+.polaroid-photo{
+position:absolute;
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+border-radius:8px;
+
+transition:opacity .6s ease;
+
+z-index:2;
+}
+
+/* flowers */
+
+.flower{
+position:absolute;
+width:240px;
+z-index:5;
+pointer-events:none;
+}
+
+/* flower top left */
+
+.flower-left{
+top:-150px;
+left:-460px;
+}
+
+/* flower bottom right */
+
+.flower-right{
+bottom:-80px;
+right:-60px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- about board -->
+<img src="Image/BOARD.png" class="about-board">
+
+
+<!-- polaroid group -->
+<div class="polaroid-wrap">
+
+<!-- static polaroid frame -->
+<img src="Image/BG ABOUT ME POLOROID.png" class="polaroid-back">
+
+<!-- changing image -->
+<img id="polaroid" class="polaroid-photo" src="Image/IMAGE ABOUT ME.png">
+
+<!-- flower decorations -->
+<img src="Image/yel flower upper.png" class="flower flower-left">
+
+<img src="Image/yellow flower lower.png" class="flower flower-right">
+
+</div>
+
+</div>
+
+<script>
+
+/* slideshow images */
+
+const images = [
+"Image/IMAGE ABOUT ME.png",
+"Image/ABOUT ME 1.png",
+"Image/ABOUT ME 2.png",
+"Image/ABOUT ME 5.png"
+];
+
+let index = 0;
+
+function changePhoto(){
+
+const photo = document.getElementById("polaroid");
+
+photo.style.opacity = 0;
+
+setTimeout(()=>{
+
+index = (index + 1) % images.length;
+
+photo.src = images[index];
+
+photo.style.opacity = 1;
+
+},300);
+
+}
+
+setInterval(changePhoto,3000);
+
+</script>
+
+</body>
+</html>

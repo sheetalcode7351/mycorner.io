@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recent Fav</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+font-family:Arial,sans-serif;
+
+background:url("Image/mbg.png") center/cover no-repeat;
+}
+
+.scene{
+position:relative;
+width:min(92vw,1280px);
+aspect-ratio:16/9;
+overflow:hidden;
+}
+
+/* heading */
+
+.heading{
+position:absolute;
+top:5%;
+left:50%;
+transform:translateX(-50%);
+width:50%;
+max-width:560px;
+z-index:10;
+}
+
+/* albums */
+
+.album{
+position:absolute;
+cursor:pointer;
+transition:all .8s cubic-bezier(.22,.8,.2,1);
+z-index:6;
+}
+
+.album img{
+width:100%;
+display:block;
+pointer-events:none;
+}
+
+/* big album */
+
+.album-large{
+left:16%;
+top:30%;
+width:25%;
+}
+
+/* small album */
+
+.album-small{
+left:65%;
+top:40%;
+width:17%;
+}
+
+/* CD */
+
+.cd{
+position:absolute;
+left:25%;
+top:30%;
+width:33%;
+z-index:4;
+animation:spin 6s linear infinite;
+}
+
+.cd img{
+width:100%;
+}
+/* album hover effect */
+
+.album:hover{
+transform:scale(1.05);
+
+filter:drop-shadow(0 10px 20px rgba(0,0,0,0.25));
+
+transition:all .35s ease;
+}
+
+/* small album stronger hover */
+
+.album-small:hover{
+transform:scale(1.08);
+}
+
+/* cd hover subtle glow */
+
+.cd:hover{
+filter:drop-shadow(0 0 10px rgba(255,255,255,0.35));
+}
+@keyframes spin{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
+
+/* music notes */
+
+.music-layer{
+position:absolute;
+inset:0;
+pointer-events:none;
+z-index:9;
+}
+
+.note{
+position:absolute;
+font-size:26px;
+color:#ff4a4a;
+opacity:0;
+animation:floatNote 4s linear infinite;
+}
+
+.note.n1{left:53%;top:45%;animation-delay:0s;}
+.note.n2{left:56%;top:40%;animation-delay:1s;}
+.note.n3{left:51%;top:49%;animation-delay:2s;}
+
+@keyframes floatNote{
+
+0%{
+transform:translate(0,0) scale(.7);
+opacity:0;
+}
+
+20%{
+opacity:1;
+}
+
+80%{
+opacity:1;
+}
+
+100%{
+transform:translate(40px,-70px) scale(1.1);
+opacity:0;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="scene state-bairan" id="scene">
+
+<!-- heading -->
+<img src="Image/music heading.png" class="heading">
+
+<!-- big album -->
+<div class="album album-large" id="bigAlbumWrap">
+<img src="Image/music biran full.png" id="bigAlbum">
+</div>
+
+<!-- CD -->
+<div class="cd">
+<img src="Image/music cd.png">
+</div>
+
+<!-- small album -->
+<div class="album album-small" id="smallAlbumWrap">
+<img src="Image/music neelm full.png" id="smallAlbum">
+</div>
+
+<!-- music notes -->
+<div class="music-layer">
+<div class="note n1">♪</div>
+<div class="note n2">♫</div>
+<div class="note n3">♩</div>
+</div>
+
+</div>
+
+<script>
+
+const scene=document.getElementById("scene")
+const bigAlbum=document.getElementById("bigAlbum")
+const smallAlbum=document.getElementById("smallAlbum")
+
+const bigWrap=document.getElementById("bigAlbumWrap")
+const smallWrap=document.getElementById("smallAlbumWrap")
+
+let current="bairan"
+
+function swap(){
+
+if(current==="bairan"){
+
+bigAlbum.src="Image/music neelm full.png"
+smallAlbum.src="Image/music biran full.png"
+
+current="neelam"
+
+}else{
+
+bigAlbum.src="Image/music biran full.png"
+smallAlbum.src="Image/music neelm full.png"
+
+current="bairan"
+
+}
+
+}
+
+bigWrap.onclick=swap
+smallWrap.onclick=swap
+
+</script>
+
+</body>
+</html>

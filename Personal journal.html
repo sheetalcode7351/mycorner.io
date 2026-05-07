@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journal Scrapbook</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --paper:#fbf7f1;
+      --paper-back:#f1e7d8;
+      --book-width:min(76vw, 950px);
+      --book-height:min(78vh, 620px);
+    }
+
+    body{
+      min-height:100vh;
+      font-family:Georgia,"Times New Roman",serif;
+      background:url("Image/N BG.jpeg") center/cover no-repeat;
+      overflow:hidden;
+    }
+
+    .main-wrap{
+      width:100%;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:30px 20px;
+    }
+
+    .book-area{
+      position:relative;
+      width:var(--book-width);
+      height:var(--book-height);
+      perspective:3000px;
+    }
+
+    .book-shadow-floor{
+      position:absolute;
+      left:10%;
+      bottom:-18px;
+      width:80%;
+      height:28px;
+      background:radial-gradient(ellipse at center, rgba(0,0,0,0.28), transparent 72%);
+      filter:blur(10px);
+      z-index:0;
+    }
+
+    .moving-shadow{
+      position:absolute;
+      top:2%;
+      left:50%;
+      width:22%;
+      height:96%;
+      z-index:6;
+      pointer-events:none;
+      background:linear-gradient(to right, rgba(0,0,0,0.12), transparent);
+      filter:blur(8px);
+      opacity:.5;
+      transition:left .9s ease,width .9s ease,opacity .9s ease;
+    }
+
+    .book{
+      position:relative;
+      width:100%;
+      height:100%;
+      transform-style:preserve-3d;
+      z-index:2;
+    }
+
+    .spine{
+      position:absolute;
+      left:50%;
+      top:0;
+      transform:translateX(-50%);
+      width:20px;
+      height:100%;
+      z-index:8;
+      background:
+        linear-gradient(
+          to right,
+          rgba(40,20,10,0.35),
+          rgba(255,255,255,0.08),
+          rgba(40,20,10,0.18)
+        );
+      box-shadow:
+        inset 6px 0 10px rgba(255,255,255,0.08),
+        inset -6px 0 12px rgba(0,0,0,0.14);
+    }
+
+    .left-static{
+      position:absolute;
+      top:0;
+      left:0;
+      width:50%;
+      height:100%;
+      border-radius:14px 0 0 14px;
+      overflow:hidden;
+      z-index:1;
+    }
+
+    .side-image{
+      position:absolute;
+      max-width:88%;
+      max-height:58%;
+      object-fit:contain;
+      display:block;
+      z-index:2;
+    }
+
+    .front-left-image{
+      left:20%;
+      top:50%;
+      transform:translateY(-50%);
+    }
+
+    .back-right-image{
+      right:14%;
+      top:50%;
+      transform:translateY(-50%);
+    }
+
+    .sheet{
+      position:absolute;
+      top:0;
+      left:50%;
+      width:50%;
+      height:100%;
+      transform-origin:left center;
+      transform-style:preserve-3d;
+      transition:transform 1.2s cubic-bezier(.2,.7,.15,1);
+      cursor:pointer;
+    }
+
+    .sheet.flipped{
+      transform:rotateY(-180deg);
+    }
+
+    .page{
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+      backface-visibility:hidden;
+      border-left:1px solid rgba(120,90,65,0.14);
+      border-radius:0 14px 14px 0;
+    }
+
+    .page.front{
+      background:
+        linear-gradient(to right,rgba(0,0,0,0.08),transparent 20%),
+        linear-gradient(to bottom,rgba(255,255,255,0.65),transparent 12%),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 30px,
+          rgba(170,140,110,0.05) 31px
+        ),
+        var(--paper);
+    }
+
+    .page.back{
+      background:
+        linear-gradient(to left,rgba(0,0,0,0.09),transparent 20%),
+        linear-gradient(to bottom,rgba(255,255,255,0.42),transparent 10%),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 30px,
+          rgba(170,140,110,0.05) 31px
+        ),
+        var(--paper-back);
+      transform:rotateY(180deg);
+      border-radius:14px 0 0 14px;
+    }
+
+    .cover-img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .page-img-wrap{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+    }
+
+    .page-img{
+      max-width:92%;
+      max-height:92%;
+      object-fit:contain;
+      display:block;
+      filter:drop-shadow(0 8px 14px rgba(0,0,0,0.12));
+    }
+
+    .page-no{
+      position:absolute;
+      bottom:16px;
+      font-size:12px;
+      color:rgba(92,67,46,0.45);
+      letter-spacing:1px;
+      z-index:5;
+    }
+
+    .page.front .page-no{
+      right:18px;
+    }
+
+    .page.back .page-no{
+      left:18px;
+    }
+
+    .nav-zone{
+      position:absolute;
+      top:0;
+      width:20%;
+      height:100%;
+      z-index:50;
+      cursor:pointer;
+    }
+
+    .nav-zone.left{ left:0; }
+    .nav-zone.right{ right:0; }
+
+    .hint{
+      position:absolute;
+      bottom:-45px;
+      width:100%;
+      text-align:center;
+      font-size:14px;
+      color:#C93D58;
+    }
+
+    .back-side-panel{
+      position:absolute;
+      top:0;
+      right:0;
+      width:50%;
+      height:100%;
+      border-radius:0 14px 14px 0;
+      overflow:hidden;
+      z-index:1;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .4s ease;
+    }
+
+    .back-side-panel.show{
+      opacity:1;
+    }
+
+    @media (max-width:900px){
+      :root{
+        --book-width:min(94vw, 820px);
+        --book-height:min(64vh, 520px);
+      }
+
+      .side-image{
+        max-width:74%;
+        max-height:32%;
+      }
+    }
+
+    @media (max-width:640px){
+      :root{
+        --book-width:96vw;
+        --book-height:54vh;
+      }
+
+      .hint{
+        font-size:12px;
+        bottom:-34px;
+      }
+
+      .side-image{
+        max-width:76%;
+        max-height:28%;
+      }
+
+      .page-img{
+        max-width:94%;
+        max-height:94%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrap">
+    <div class="book-area">
+
+      <div class="book-shadow-floor"></div>
+      <div class="moving-shadow" id="movingShadow"></div>
+
+      <div class="book" id="book">
+
+        <!-- left static starting page -->
+        <div class="left-static" id="frontLeftPanel">
+          <img src="Image/MYY CORNER.png" alt="My Corner" class="side-image front-left-image">
+        </div>
+
+        <!-- right static ending page -->
+        <div class="back-side-panel" id="backRightPanel">
+          <img src="Image/BEFFORE U GO.png" alt="Back Text" class="side-image back-right-image">
+        </div>
+
+        <div class="spine"></div>
+
+        <!-- FRONT COVER + PAGE 1 -->
+        <div class="sheet" data-sheet="0">
+          <div class="page front">
+            <img src="Image/front cover page.png" class="cover-img" alt="Front Cover">
+          </div>
+          <div class="page back">
+            <div class="page-img-wrap">
+            </div>
+            <div class="page-no">1</div>
+          </div>
+        </div>
+
+        <!-- PAGE 2 + PAGE 3 -->
+        <div class="sheet" data-sheet="1">
+          <div class="page front">
+            <div class="page-img-wrap">
+              <img src="Image/SCRAP BOOK 2 PAGE.png" class="page-img" alt="Page 2">
+            </div>
+            <div class="page-no">2</div>
+          </div>
+          <div class="page back">
+            <div class="page-img-wrap">
+              <img src="Image/SCRAP BOOK 3 PAGE.png" class="page-img" alt="Page 3">
+            </div>
+            <div class="page-no">3</div>
+          </div>
+        </div>
+
+        <!-- PAGE 4 + PAGE 5 -->
+        <div class="sheet" data-sheet="2">
+          <div class="page front">
+            <div class="page-img-wrap">
+              <img src="Image/SCRAP BOOK 4 PAGE.png" class="page-img" alt="Page 4">
+            </div>
+            <div class="page-no">4</div>
+          </div>
+          <div class="page back">
+            <div class="page-img-wrap">
+              <img src="Image/SCRAP BOOK 5 PAGE.png" class="page-img" alt="Page 5">
+            </div>
+            <div class="page-no">5</div>
+          </div>
+        </div>
+
+        <!-- PAGE 6 + PAGE 7 -->
+        <div class="sheet" data-sheet="3">
+          <div class="page front">
+            <div class="page-img-wrap">
+              <img src="Image/SCRAP BOOK 6 PAGE.png" class="page-img" alt="Page 6">
+            </div>
+            <div class="page-no">6</div>
+          </div>
+          <div class="page back">
+            <div class="page-img-wrap">
+              <img src="Image/SCRAP BOOK 7 PAGE.png" class="page-img" alt="Page 7">
+            </div>
+            <div class="page-no">7</div>
+          </div>
+        </div>
+
+        <!-- PAGE 8 + BACK COVER -->
+        <div class="sheet" data-sheet="4">
+          <div class="page front">
+            <div class="page-img-wrap">
+              <img src="Image/SCRAP BOOK 8 PAGE.png" class="page-img" alt="Page 8">
+            </div>
+            <div class="page-no">8</div>
+          </div>
+          <div class="page back">
+            <img src="Image/back book cover.png" class="cover-img" alt="Back Cover">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="nav-zone left" id="leftZone"></div>
+      <div class="nav-zone right" id="rightZone"></div>
+
+      <div class="hint">
+        Click right side to open next page • Click left side to go back
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const sheets = document.querySelectorAll(".sheet");
+    const leftZone = document.getElementById("leftZone");
+    const rightZone = document.getElementById("rightZone");
+    const movingShadow = document.getElementById("movingShadow");
+    const backRightPanel = document.getElementById("backRightPanel");
+
+    let currentSheet = 0;
+    const totalSheets = sheets.length;
+
+    function setZIndexes(){
+      sheets.forEach((sheet,index)=>{
+        if(!sheet.classList.contains("flipped")){
+          sheet.style.zIndex = totalSheets - index + 2;
+        }else{
+          sheet.style.zIndex = index + 1;
+        }
+      });
+    }
+
+    function updateMovingShadow(){
+      const progress = currentSheet / totalSheets;
+      const left = 50 - (progress * 20);
+      const width = 22 + (progress * 12);
+      const opacity = 0.50 - (progress * 0.12);
+
+      movingShadow.style.left = left + "%";
+      movingShadow.style.width = width + "%";
+      movingShadow.style.opacity = opacity;
+
+      if(currentSheet === totalSheets){
+        backRightPanel.classList.add("show");
+      }else{
+        backRightPanel.classList.remove("show");
+      }
+    }
+
+    function goNext(){
+      if(currentSheet < totalSheets){
+        sheets[currentSheet].classList.add("flipped");
+        currentSheet++;
+        setZIndexes();
+        updateMovingShadow();
+      }
+    }
+
+    function goPrev(){
+      if(currentSheet > 0){
+        currentSheet--;
+        sheets[currentSheet].classList.remove("flipped");
+        setZIndexes();
+        updateMovingShadow();
+      }
+    }
+
+    rightZone.addEventListener("click", goNext);
+    leftZone.addEventListener("click", goPrev);
+
+    window.addEventListener("keydown", (e)=>{
+      if(e.key === "ArrowRight") goNext();
+      if(e.key === "ArrowLeft") goPrev();
+    });
+
+    setZIndexes();
+    updateMovingShadow();
+  </script>
+</body>
+</html>
